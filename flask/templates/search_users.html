@@ -1,0 +1,104 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<input type="search" class="searchInput" placeholder="Search users..." data-search>
+<div id="userContainer"></div>
+
+<template data-user-template>
+  <div class="card" data-user-cards-container>
+    <h5 class="view_user" view-user-tag></h5>
+    <a href="#" class="view_profile" view-profile-tag></a>
+    <form method="POST" class="friend_status">
+      <input type="hidden" name="receiver_id">
+      <button type="button" class="friend_button" friend-tag>
+      </button>
+    </form>
+  </div>
+</template>
+
+<script>
+const userCardTemplate = document.querySelector("[data-user-template]");
+const userCardContainer = document.getElementById("userContainer");
+const searchInput = document.querySelector("[data-search]");
+
+let users = [];
+
+fetch("/api_search_users")
+  .then(response => response.json())
+  .then(data => {
+    users = data.users.map(user => {
+  const card = userCardTemplate.content.cloneNode(true).children[0];
+  const view_user = card.querySelector("[view-user-tag]");
+  const view_profile = card.querySelector("[view-profile-tag]");
+  const friend_button = card.querySelector("[friend-tag]");
+
+  const fullName = `${user.first_name} ${user.last_name}`;
+  view_user.textContent = fullName;
+  view_profile.textContent = "View Profile";
+  view_profile.href = `/profile/${user.id}`;
+  friend_button.textContent = 
+  friend_button.textContent =
+    user.friend_status === "accepted" ? "Remove Friend" :
+    user.friend_status === "pending" ? "Pending" :
+    user.friend_status === "none" ? "Add Friend" : "Add Friend";
+
+  friend_button.dataset.userId = user.id;
+  friend_button.dataset.status = user.friend_status;
+
+  // friend button 
+  friend_button.addEventListener("click", () => {
+    const userId = friend_button.dataset.userId;
+    const status = friend_button.dataset.status;
+
+    let endpoint = "";
+    if (status === "accepted") {
+      endpoint = `/remove_friend/${userId}`;
+    } else if (status === "pending") {
+      endpoint = `/cancel_friend_request/${userId}`;
+    } else {
+      endpoint = `/send_friend_request/${userId}`;
+    }
+
+    fetch(endpoint, { method: "POST" })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          friend_button.textContent = data.new_label;
+          friend_button.dataset.status = data.new_status;
+        }
+      });
+    });
+
+    card.style.display = "none";
+    userCardContainer.appendChild(card);
+
+    return {
+      name: fullName,
+      element: card,
+      friend_status: user.friend_status 
+    };
+  });
+});
+searchInput.addEventListener("input", (event) => {
+  const value = event.target.value;
+
+    // If the input is empty, keep everything hidden
+    if (value === "") {
+    users.forEach(user => {
+      user.element.style.display = "none";
+    });
+    return;
+  }
+  // ^ means "starts with"
+  // "i" makes it case-insensitive
+  const regex = new RegExp("^" + value, "i"); 
+
+  users.forEach(user => {
+    const isVisible = regex.test(user.name);
+    user.element.style.display = isVisible ? "block" : "none";
+  });
+});
+
+
+
+</script>

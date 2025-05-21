@@ -1,0 +1,104 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  
+  <div id="userContainer"></div>
+  <template data-user-template>
+    <div class="card" data-user-cards-container>
+      <h5 class="view_user" view-user-tag></h5>
+      <a href="#" class="view_profile" view-profile-tag></a>
+      <form method="POST" class="friend_status">
+        <input type="hidden" name="receiver_id">
+        <button type="button" class="accept_button" accept-tag>Accept</button>
+        <button type="button" class="reject_button" reject-tag>Reject</button>
+      </form>
+    </div>
+  </template>
+  
+
+
+<script>
+
+const userCardTemplate = document.querySelector("[data-user-template]");
+const userCardContainer = document.getElementById("userContainer");
+
+let users = [];
+
+fetch("/show_friend_requests")
+  .then(response => response.json())
+  .then(data => {
+  users = data.users.map(user => {
+  const card = userCardTemplate.content.cloneNode(true).children[0];
+  const view_user = card.querySelector("[view-user-tag]");
+  const view_profile = card.querySelector("[view-profile-tag]");
+  const accept_button = card.querySelector("[accept-tag]");
+  const reject_button = card.querySelector("[reject-tag]");
+
+  const fullName = `${user.first_name} ${user.last_name}`;
+  view_user.textContent = fullName;
+  view_profile.textContent = "View Profile";
+  view_profile.href = `/profile/${user.id}`;
+  accept_button.textContent = "accept";
+  reject_button.textContent = "reject";
+
+  //store userid and status
+  accept_button.dataset.userId = user.id;
+  accept_button.dataset.status = user.friend_status;
+
+  reject_button.dataset.userId = user.id;
+  reject_button.dataset.status = user.friend_status;
+
+
+  // friend button 
+  accept_button.addEventListener("click", () => {
+    const userId =  accept_button.dataset.userId;
+    const status =  accept_button.dataset.status;
+    console.log("clicked", userId);
+
+    let endpoint = `/accept_friend/${userId}`;
+
+    fetch(endpoint, { method: "POST" })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          accept_button.textContent = data.new_label;
+          accept_button.dataset.status = data.new_status;
+          accept_button.disabled = true;
+          reject_button.disabled = true;
+        }
+      });
+    });
+
+    // reject button 
+  reject_button.addEventListener("click", () => {
+    const userId =  reject_button.dataset.userId;
+    const status =  reject_button.dataset.status;
+    card.style.display = "none";
+
+    let endpoint = `/reject_friend/${userId}`;
+
+    fetch(endpoint, { method: "POST" })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          reject_button.textContent = data.new_label;
+          reject_button.dataset.status = data.new_status;
+          accept_button.disabled = true;
+          reject_button.disabled = true;
+        }
+      });
+    });
+
+    // Debug: confirm card is ready to be appended
+    userCardContainer.appendChild(card);
+    card.style.display = "block";
+
+    return {
+      name: fullName,
+      element: card,
+      friend_status: user.friend_status 
+    };
+  });
+});
+
+</script>

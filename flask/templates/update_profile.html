@@ -1,0 +1,28 @@
+{% block content %}
+
+<h1>Update Profile Picture</h1>
+
+<!-- Display flash messages -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<!-- Flask-WTF form rendering -->
+<!-- need enctype for uploading file-->
+<form method="POST" enctype="multipart/form-data" action="{{ url_for('update_profile') }}">
+
+        {{ form.picture.label }}
+        {{ form.picture(class="form-control-file") }}
+        {% if form.picture.errors}
+            {% for error in form.picture.erros %}
+                <span class="text-danger">{{ error }}</span></br>
+    <p><input type="submit" value="Upload"></p>
+</form>
+
+{% endblock %}
