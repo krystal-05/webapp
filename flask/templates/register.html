@@ -1,0 +1,22 @@
+
+{% block title %}Login{% endblock %}
+{% block content %}
+<!-- displays messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="POST" action="/register">
+        First Name: <input type="text" name="first_name"><br>
+        Last Name: <input type="text" name="last_name"><br>
+        Email: <input type="email" name="email"><br>
+        Password: <input type="password" name="password"><br>
+        Confirm Password: <input type="password" name="confirm_password" required>
+        <button type="submit">Register</button>
+    
+    </form>
+{% endblock %}
+

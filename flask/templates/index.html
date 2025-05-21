@@ -1,0 +1,19 @@
+
+{% block title %} User {% endblock %}
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+<p> hello</p>
+
+<div>
+    <button class = "button"  onclick="window.location.href='/login'">Login</button>
+</div>
+<div>
+    <button class = "button"  onclick="window.location.href='/register'">Register</button>
+</div>
+{% endblock %}
