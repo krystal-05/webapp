@@ -1,6 +1,7 @@
 {% block content %}
 
-<h1>Update Profile Picture</h1>
+
+<h1>Update Profile</h1>
 
 <!-- Display flash messages -->
 {% with messages = get_flashed_messages() %}
@@ -17,12 +18,129 @@
 <!-- need enctype for uploading file-->
 <form method="POST" enctype="multipart/form-data" action="{{ url_for('update_profile') }}">
 
-        {{ form.picture.label }}
-        {{ form.picture(class="form-control-file") }}
-        {% if form.picture.errors}
-            {% for error in form.picture.erros %}
+        {{ form.hidden_tag() }}  <!--  This fixes the CSRF token error. This must be included to validate the submission -->
+
+        {{ form.image_file.label }}
+        {{ form.image_file(class="form-control-file") }}
+        <br>
+        {{ form.first_name.label }}
+        {{ form.first_name(class="form-control-file") }}
+        <br>
+        {{ form.last_name.label }}
+        {{ form.last_name(class="form-control-file") }}
+        <br>
+        {{ form.current_password.label }}
+        {{ form.current_password() }}
+        <br>
+        {{ form.password.label }}
+        {{ form.password() }}
+        <br>
+        {{ form.confirm_password.label }}
+        {{ form.confirm_password() }}
+
+        {% if form.confirm_password.errors %}
+            {% for error in form.confirm_password.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+
+        {% if form.image_file.errors %}
+            {% for error in form.image_file.errors %}
                 <span class="text-danger">{{ error }}</span></br>
-    <p><input type="submit" value="Upload"></p>
+            {% endfor %}
+        {% endif %}
+        <p><input type="submit" value="Update"></p>
 </form>
+<style>
+  /* Base styling */
+body {
+    background-color: #2e2e2e; /* dark gray */
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+    padding: 40px;
+  }
+  
+  /* Headline */
+  h1 {
+    color: rgb(255, 115, 0);
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  /* Form Styling */
+  form {
+    background-color: #444; /* medium gray */
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Labels */
+  label {
+    display: block;
+    font-weight: bold;
+    margin-top: 15px;
+    color: #ffd700; /* gold */
+  }
+  
+  /* Input fields */
+  input[type="text"],
+  input[type="password"],
+  input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #2e2e2e;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 16px;
+  }
+  
+  /* Submit Button */
+  input[type="submit"] {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: rgb(255, 115, 0);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #fc5400; /* red on hover */
+  }
+  
+  /* Flash messages */
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 500px;
+    background-color: #ff3b3b;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+  }
+  
+  li {
+    padding: 10px;
+  }
+  
+  /* Error text */
+  .text-danger {
+    display: block;
+    margin-top: 5px;
+    color: #ff3b3b; /* red */
+    font-size: 0.9rem;
+  }
+</style>
 
 {% endblock %}

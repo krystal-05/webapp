@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="form-container">
+        <h2>Add Workout</h2>
+    
+         <!-- form to add workout -->
+        <!-- form uses current date/time as a placeholder -->
+        <form method="POST" action="/add_workout">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="workout_title" placeholder="Workout">
+    
+            <label for="exercise">Choose a workout:</label>
+            <select id="exercise" name="exercise">
+                <option value="default"> </option>
+                <option value="run">Running</option>
+                <option value="lift">Weight Lifting</option>
+                <option value="bike">Biking</option>
+                <option value="swim">Swimming</option>
+            </select>
+    
+            <label for="dateInput">Date:</label>
+            <input type="datetime-local" id="dateInput" name="datetime">
+    
+            <label for="duration">Duration:</label>
+            <div class="duration-inputs">
+                <select name="hours" id="hours">
+                    <option value="0">0 hr</option>
+                    {% for h in range(1, 20) %}
+                    <option value="{{ h }}">{{ h }} hr</option>
+                    {% endfor %}
+                </select>
+    
+                <select name="minutes" id="minutes">
+                    {% for m in range(0, 60) %}
+                    <option value="{{ m }}">{{ m }} min</option>
+                    {% endfor %}
+                </select>
+    
+                <select name="seconds" id="seconds">
+                    {% for s in range(0, 60) %}
+                    <option value="{{ s }}">{{ s }} sec</option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+{% endblock %}
+
+<script>
+let exercise_option = document.getElementById("exercise");
+exercise_option.addEventListener("change", (event) => {
+    const selected_workout = event.target.value;
+});
+
+
+</script>
+
+<style>
+    .form-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #858585;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+form label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="datetime-local"],
+form select.styled-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    appearance: none;
+    background-color: white;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D'16'%20height%3D'16'%20fill%3D'gray'%20viewBox%3D'0%200%2016%2016'%3E%3Cpath%20d%3D'M1.5%205.5l6%206%206-6'%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+.duration-inputs {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.duration-inputs select.styled-select {
+    flex: 1;
+}
+
+button[type="submit"] {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background-color: #18b300;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #36d71d;
+}
+
+
+</style>

@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Edit Workout</h1>
+
+<!-- Display flash messages -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<!-- Flask-WTF form rendering -->
+<form method="POST" action="{{ url_for('edit_workout', workout_id=workout_id) }}" class="form-container">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+        {{ form.title.label(class="form-label") }}
+        {{ form.title(class="form-input") }}
+        {% if form.title.errors %}
+            <div class="form-error">{{ form.title.errors[0] }}</div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form.exercise.label(class="form-label") }}
+        {{ form.exercise(class="form-input") }}
+        {% if form.exercise.errors %}
+            <div class="form-error">{{ form.exercise.errors[0] }}</div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form.date.label(class="form-label") }}
+        {{ form.date(class="form-input") }}
+        {% if form.date.errors %}
+            <div class="form-error">{{ form.date.errors[0] }}</div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form.hours.label(class="form-label") }}
+        {{ form.hours(class="form-input") }}
+        {{ form.minutes.label(class="form-label") }}
+        {{ form.minutes(class="form-input") }}
+        {{ form.seconds.label(class="form-label") }}
+        {{ form.seconds(class="form-input") }}
+    </div>
+
+    <div class="form-actions">
+        {{ form.update(class="btn btn-update") }}
+        {{ form.delete(class="btn btn-delete") }}
+    </div>
+</form>
+
+</form>
+
+<style>
+body {
+  background-color: black;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  padding: 40px;
+}
+
+h1 {
+  color: rgb(255, 115, 0);
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-container {
+  background-color: gray;
+  padding: 40px;
+  border-radius: 16px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  color: rgb(255, 115, 0);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+  transition: border 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: rgb(255, 115, 0);
+  outline: none;
+}
+
+.form-error {
+  color: #ff3b3b;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: white;
+}
+
+.btn-update {
+  background-color: #4caf50;
+}
+
+.btn-update:hover {
+  background-color: #45a049;
+}
+
+.btn-delete {
+  background-color: #f44336;
+}
+
+.btn-delete:hover {
+  background-color: #d32f2f;
+}
+select.form-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+  color: #333;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%225%22%20viewBox%3D%220%200%2010%205%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M0%200l5%205%205-5z%22%20fill%3D%22%23666%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px 5px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+select.form-input:focus {
+  border-color: rgb(255, 115, 0);
+  outline: none;
+  background-color: #fff;
+}
+
+</style>
+
+{% endblock %}

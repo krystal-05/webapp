@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Profile {% endblock %}</title>
+</head>
+<body>
+    
+    <!-- Navbar with dropdown -->
+    <nav class="gradient-navbar">
+        <button class="button" onclick="window.location.href='/add_workout'">Add Workout</button>
+        <button class="button" onclick="window.location.href='/view_workouts'">View Workouts</button>
+        <button class="button" onclick="window.location.href='/user_page'">Profile</button>
+        <button class="button" onclick="window.location.href='/challenges'">Challenges</button>
+        <button class="button" onclick="window.location.href='/friends'">Friends</button>
+        <div class="dropdown" style="position: relative;">
+            <button class="button" onclick="toggleDropdown()" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                More
+            </button>
+            <div id="dropdownMenu" class="dropdown-menu">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </div>
+    </nav>
+    <script>
+       let menu = document.getElementById("dropdownMenu");
+       let button = document.getElementById("dropdownMenuButton");
+        function toggleDropdown() {
+            //add click event listener
+            if (menu.style.display === "none" || menu.style.display === "") {
+                menu.style.display = "block";
+            } else {
+                menu.style.display = "none";
+            }
+            
+        }
+
+
+    </script>
+    <!-- Main content section will be replaced by the content block -->
+    <main style="flex-grow: 1;">
+        {% block content %}
+        <!-- This block will be overridden in child templates -->
+        {% endblock %}
+    </main>
+    
+    <!-- Footer section -->
+    <footer class="main-footer">
+        <a href="/" class="footer-link">Home</a>
+        <a href="/about" class="footer-link">About</a>
+        <a href="/contact" class="footer-link">Contact</a>
+      </footer>
+
+<script>
+    //get users time zone
+    document.addEventListener("DOMContentLoaded", function() {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      
+        // Send to backend if not already set
+        fetch("/set_timezone", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ timezone: timezone })
+        });
+    });
+</script>
+    
+<style>
+    /* RESET STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    height: 100%;
+    background-color: black;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* LAYOUT */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* NAVBAR */
+  .gradient-navbar {
+    width: 100%;
+    background: linear-gradient(90deg, #fc4a1a 0%, #ffee00 100%);
+    padding: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+  
+  /* NAVBAR BUTTONS */
+  .button {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .button:hover {
+    background-color: #ddd;
+  }
+  
+  /* DROPDOWN */
+  .dropdown {
+    position: relative;
+  }
+  
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    background: #fff;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    z-index: 300;
+    flex-direction: column;
+  }
+  
+  .dropdown-item {
+    padding: 10px 16px;
+    color: #000;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f0f0f0;
+    border-radius: 8px;
+  }
+  
+  /* FOOTER */
+  .main-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(90deg, #fc4a1a 0%, #f7b733 100%);
+    padding: 1rem 0;
+    box-shadow: 0 -2px 8px rgba(35, 39, 42, 0.08);
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    z-index: 100;
+  }
+  
+  .footer-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+  }
+  
+  .footer-link:hover {
+    color: #222;
+  }
+  
+</style>
+</body>
+</html>

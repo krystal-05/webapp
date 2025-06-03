@@ -1,19 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div>
-    <button class="button" onclick="window.location.href='/search_users'">Search User</button>
-</div>
-<div>
-    <button class="button" onclick="window.location.href='/show_requests'">Requests</button>
-</div>
+<!-- View the users first name, last name, and stats  -->
 
-<div class="profile-card">
-        
-    <!-- Settings Image -->
-    <button class="settings-image styled-button" onclick="window.location.href='/update_profile'">
-        <img src="{{ url_for('static', filename='app_pics/update_profile.png') }}" alt="Settings">
-    </button>
+    <div class="profile-card" data-user-id="{{ user.id }}">
 
 
      <!-- Profile Image -->
@@ -50,11 +40,14 @@
       </template>
 </div>
 
+
 <script>
-const statsTemplate = document.querySelector("[data-stats-template]")
-const statsContainer = document.getElementById("statsContainer")
+const user_id = document.querySelector(".profile-card").dataset.userId
+const statsTemplate = document.querySelector("[data-stats-template]");
+const statsContainer = document.getElementById("statsContainer");
+
 //display total activities
-fetch("/user_page_api")
+fetch(`/view_other_user_api/${user_id}`)
     .then(response => response.json())
     .then(data => {
         //dont need to use map since single objects are being used, not an array
@@ -75,7 +68,7 @@ fetch("/user_page_api")
 
 </script>
 <style>
-  body {
+    body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
   }
@@ -182,4 +175,4 @@ fetch("/user_page_api")
   
  
 </style>
-{% endblock %}
+{%  endblock %}

@@ -1,15 +1,10 @@
 
-{% block title %} User {% endblock %}
 {% block content %}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for msg in messages %}
-                <p>{{msg}}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-<p> hello</p>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    </head>
 
+    
 <div>
     <button class = "button"  onclick="window.location.href='/login'">Login</button>
 </div>
